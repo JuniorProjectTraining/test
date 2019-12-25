@@ -54,6 +54,74 @@ public class EmpDao implements IEmpDao {
 
 		return null;
 	}
+	public int findEmpByNickname(String nickname) {
+
+		String sql = "select * from emp where nickname=?";
+
+		// 1, 获取到链接数据库的对象
+		Connection connection = MyDBUtils.getConnection();
+
+		try {
+
+			// 2, 获取到执行sql语句的预编译对象
+			PreparedStatement prepareStatement = connection.prepareStatement(sql);
+
+			// 3, 给sql中的占位符[?] 赋值
+			prepareStatement.setString(1, nickname);
+
+			// 4, 执行sql语句, 得到结果集
+			ResultSet resultSet = prepareStatement.executeQuery();
+
+			// 5, 如果有值, 则封装, 然后, 返回
+			while (resultSet.next()) {
+
+				return 1;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				// 断开链接, 释放资源
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return 0;
+	}
+
+	public void registerEmp(Emp emp) {
+		String sql = "insert into emp values(null, ?, ?, ?, ?)";
+
+		Connection connection = MyDBUtils.getConnection();
+
+		try {
+			// 获取到执行sql的对象
+			PreparedStatement prepareStatement = connection.prepareStatement(sql);
+
+			// 给占位符赋值
+			prepareStatement.setString(1, emp.getNickname());
+			prepareStatement.setString(2, emp.getPassword());
+			prepareStatement.setString(3, emp.getGender());
+			prepareStatement.setDouble(4, emp.getSalary());
+
+			// 执行 增, 删, 改, 都是使用executeUpdate()方法
+			prepareStatement.executeUpdate();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 
 }
 

@@ -25,7 +25,11 @@ public class web extends HttpServlet {
 
 		if ("login".equals(cmd)) {
 			login(req, resp);
+		}else if ("register".equals(cmd)) {
+			register(req, resp);
 		}
+
+
 		System.out.print("OK");
 
 	}
@@ -65,6 +69,44 @@ public class web extends HttpServlet {
 		}
 
 	}
+	private void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 首先获取到前台页面传递的数据
+		String nickname = req.getParameter("nickname");
+		String password = req.getParameter("password");
+		String gender = req.getParameter("gender");
+		double salary = Double.parseDouble(req.getParameter("salary"));
+
+		/**
+		 * 可以首先判断昵称是否已经被使用, 如果被使用, 则不允许注册.
+		 */
+		// 获取到服务对象
+		IEmpService service = new EmpService();
+
+		// 调用判断用户名是否存在的方法.
+		// 1表示存在, 非1表示不存在
+		int flag = service.findEmpByNickname(nickname);
+
+		if (flag == 1) {
+			// 把提示信息放入到请求域中
+			req.setAttribute("nicknameMsg", "该昵称已存在, 请换一个昵称");
+			// 请求转发
+			req.getRequestDispatcher("/registere.jsp").forward(req, resp);
+
+			return;
+		} else {
+			// 把所有的数据封装到实体对象中
+			Emp emp = new Emp(1, nickname, password, gender, salary);
+
+			// 调用注册的方法
+			service.registerEmp(emp);
+
+			resp.getWriter().write("注册成功, 3s后跳转到登录页面");
+
+			resp.setHeader("refresh", "3;url=/second/login.jsp");
+		}
+
+	}
+
 
 
 }

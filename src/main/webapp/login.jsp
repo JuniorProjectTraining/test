@@ -28,8 +28,8 @@ transition: 0.3s;
         
 #beijing {
         background-image: url(timg.jpg);
-        background-size: 1000px 1700px;
-        background-repeat: no-repeat;
+        background-size: 500px 500px;
+        
         }
 </style>
 </head>
@@ -39,9 +39,12 @@ transition: 0.3s;
 	<form style="text-align: center;" action="${pageContext.request.contextPath }/EmpServlet?cmd=login" method="post">
 		<input id="nickname" name="nickname" placeholder="用户名" />
 		<br>
+		<br>
 		<input type="password" id="password" name="password" placeholder="密碼" />
 		<br>
+		<br>
 		<input type="submit" value="登錄">
+		<input type="submit" value="注册"> 
 	</form>
 </div>
 </body>
